@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StepMaster | Premium Ayakkabı Dünyası</title>
+    <!-- Google Fonts ve Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #ff4757;
+            --dark-color: #2f3542;
+            --light-bg: #f1f2f6;
+            --white: #ffffff;
+            --shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-color);
+            scroll-behavior: smooth;
+        }
+
+        /* Navigasyon */
+        nav {
+            background: var(--white);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Hero Bölümü */
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1552346154-21d32810aba3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+
+        .hero h1 { font-size: 4rem; margin-bottom: 20px; }
+        .btn-shop {
+            padding: 15px 40px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        /* Ürünler */
+        .container { padding: 50px 5%; }
+        .section-title { text-align: center; margin-bottom: 40px; font-size: 2rem; }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover { transform: translateY(-10px); }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+        }
+
+        .product-info { margin-top: 15px; }
+        .price { color: var(--primary-color); font-weight: 700; font-size: 1.2rem; }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 10px;
+            background: var(--dark-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .add-to-cart:hover { background: var(--primary-color); }
+
+        /* Modal (Giriş/Kayıt/Sepet) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 5px; }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Sepet Özel */
+        #cart-modal .modal-content { max-width: 600px; }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Bildirim */
+        #notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            display: none;
+            z-index: 3000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigasyon -->
+    <nav>
+        <div class="logo">STEPMASTER</div>
+        <ul class="nav-links">
+            <li><a href="#">Anasayfa</a></li>
+            <li><a href="#shop">Koleksiyon</a></li>
+            <li><a href="#">Hakkımızda</a></li>
+        </ul>
+        <div class="nav-icons">
+            <i class="fas fa-search"></i>
+            <i class="fas fa-user" onclick="toggleModal('login-modal')"></i>
+            <div style="position: relative;" onclick="toggleModal('cart-modal')">
+                <i class="fas fa-shopping-bag"></i>
+                <span id="cart-count" style="position: absolute; top: -10px; right: -10px; background: var(--primary-color); color: white; font-size: 12px; padding: 2px 6px; border-radius: 50%;">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>TARZINI ADIMLARINLA BELİRLE</h1>
+        <p>En yeni sezon ayakkabılarda %40'a varan indirimler.</p><br>
+        <a href="#shop" class="btn-shop">Şimdi Keşfet</a>
+    </section>
+
+    <!-- Ürünler -->
+    <div class="container" id="shop">
+        <h2 class="section-title">Popüler Modeller</h2>
+        <div class="products-grid" id="product-list">
+            <!-- JavaScript ile doldurulacak -->
+        </div>
+    </div>
+
+    <!-- Giriş Modalı -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleModal('login-modal')">&times;</span>
+            <h2 style="margin-bottom: 20px;">Giriş Yap</h2>
+            <div class="form-group">
+                <label>E-posta</label>
+                <input type="email" placeholder="ornek@mail.com">
+            </div>
+            <div class="form-group">
+                <label>Şifre</label>
+                <input type="password" placeholder="******">
+            </div>
+            <button class="add-to-cart" onclick="login()">Giriş Yap</button>
+            <p style="margin-top: 15px; font-size: 14px;">Hesabınız yok mu? <a href="#" style="color: var(--primary-color);">Kayıt Ol</a></p>
+        </div>
+    </div>
+
+    <!-- Sepet Modalı -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleModal('cart-modal')">&times;</span>
+            <h2 style="margin-bottom: 20px;">Sepetiniz</h2>
+            <div id="cart-items-container">
+                <!-- Sepet elemanları -->
+            </div>
+            <div style="margin-top: 20px; border-top: 2px solid #eee; padding-top: 20px;">
+                <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.2rem;">
+                    <span>Toplam:</span>
+                    <span id="cart-total">0.00 TL</span>
+                </div>
+                <button class="add-to-cart" style="background: #27ae60;" onclick="checkout()">Siparişi Tamamla</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification">Ürün sepete eklendi!</div>
+
+    <script>
+        // Ürün Verileri
+        const products = [
+            { id: 1, name: "Air Max Pro", price: 2450.00, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=80" },
+            { id: 2, name: "Ultra Boost", price: 3100.00, img: "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?auto=format&fit=crop&w=500&q=80" },
+            { id: 3, name: "Classic Leather", price: 1850.00, img: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=500&q=80" },
+            { id: 4, name: "Sport Elite", price: 2150.00, img: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=500&q=80" },
+            { id: 5, name: "Urban Street", price: 1200.00, img: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=500&q=80" },
+            { id: 6, name: "Retro Vibe", price: 2750.00, img: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=500&q=80" }
+        ];
+
+        let cart = [];
+
+        // Ürünleri Listele
+        function displayProducts() {
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <img src="${product.img}" alt="${product.name}">
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p class="price">${product.price.toFixed(2)} TL</p>
+                        <button class="add-to-cart" onclick="addToCart(${product.id})">Sepete Ekle</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Modal Kontrolü
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        // Sepete Ekleme
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            cart.push(product);
+            updateCart();
+            showNotification();
+        }
+
+        // Sepeti Güncelle
+        function updateCart() {
+            const cartCount = document.getElementById('cart-count');
+            const cartItemsContainer = document.getElementById('cart-items-container');
+            const cartTotal = document.getElementById('cart-total');
+            
+            cartCount.innerText = cart.length;
+            
+            cartItemsContainer.innerHTML = cart.map((item, index) => `
+                <div class="cart-item">
+                    <span>${item.name}</span>
+                    <span>${item.price.toFixed(2)} TL <i class="fas fa-trash" style="color:red; cursor:pointer; margin-left:10px" onclick="removeFromCart(${index})"></i></span>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            cartTotal.innerText = total.toFixed(2) + " TL";
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        // Bildirim Göster
+        function showNotification() {
+            const note = document.getElementById('notification');
+            note.style.display = 'block';
+            setTimeout(() => { note.style.display = 'none'; }, 2000);
+        }
+
+        // Fonksiyonlar
+        function login() {
+            alert("Giriş başarılı! Hoş geldiniz.");
+            toggleModal('login-modal');
+        }
+
+        function checkout() {
+            if(cart.length === 0) {
+                alert("Sepetiniz boş!");
+                return;
+            }
+            alert("Siparişiniz alındı! Hazırlanıyor...");
+            cart = [];
+            updateCart();
+            toggleModal('cart-modal');
+        }
+
+        // Başlangıçta ürünleri yükle
+        displayProducts();
+
+        // Modal dışına tıklayınca kapatma
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
